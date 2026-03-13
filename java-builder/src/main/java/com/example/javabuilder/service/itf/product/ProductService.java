@@ -12,4 +12,5 @@ public interface ProductService {
     List<Product> getAllProducts();
     void deleteProductById(String id);
     boolean existsByName(String name);
+    Product updateProduct(String id, ProductRequestDTO product);
 }

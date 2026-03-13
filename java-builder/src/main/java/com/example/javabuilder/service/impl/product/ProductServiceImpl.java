@@ -3,11 +3,13 @@ package com.example.javabuilder.service.impl.product;
 import com.example.javabuilder.dto.request.ProductRequestDTO;
 import com.example.javabuilder.exception.AppException;
 import com.example.javabuilder.exception.ErrorCode;
+import com.example.javabuilder.mapper.ProductMapper;
 import com.example.javabuilder.model.Product;
 import com.example.javabuilder.repository.ProductRepository;
 import com.example.javabuilder.service.itf.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,19 +19,15 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
+    @Autowired
+    private ProductMapper productMapper;
+
     @Override
     public Product createProduct(ProductRequestDTO dto) {
         if (productRepository.existsByName(dto.getName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
-
-        Product product = Product.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .price(dto.getPrice())
-                .imageUrl(dto.getImageUrl())
-                .build();
-
+        Product product = productMapper.toProduct(dto);
         productRepository.save(product);
         return product;
     }
@@ -55,6 +53,12 @@ public class ProductServiceImpl implements ProductService {
         // Giả sử để bắt exception chứ sản phẩm có thể trùng tên
         if (productRepository.existsByName(name)) throw new RuntimeException("tên sản phầm đã tồn tại");
         return false;
+    }
+
+    public Product updateProduct(String productId, ProductRequestDTO request) {
+        Product product = getProductById(productId);
+        productMapper.updateProduct(product,request);
+        return productRepository.save(product);
     }
 
 
