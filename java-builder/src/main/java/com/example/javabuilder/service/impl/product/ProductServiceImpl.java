@@ -1,6 +1,7 @@
 package com.example.javabuilder.service.impl.product;
 
 import com.example.javabuilder.dto.request.ProductRequestDTO;
+import com.example.javabuilder.dto.response.ProductResponseDTO;
 import com.example.javabuilder.exception.AppException;
 import com.example.javabuilder.exception.ErrorCode;
 import com.example.javabuilder.mapper.ProductMapper;
@@ -33,9 +34,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(String id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_EXISTED));
+    public ProductResponseDTO getProductById(String id) {
+        return productMapper.toProductResponse(productRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("Product not found")));
     }
 
     @Override
@@ -55,10 +56,11 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
-    public Product updateProduct(String productId, ProductRequestDTO request) {
-        Product product = getProductById(productId);
+    public ProductResponseDTO updateProduct(String productId, ProductRequestDTO request) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
         productMapper.updateProduct(product,request);
-        return productRepository.save(product);
+        return productMapper.toProductResponse(productRepository.save(product));
     }
 
 

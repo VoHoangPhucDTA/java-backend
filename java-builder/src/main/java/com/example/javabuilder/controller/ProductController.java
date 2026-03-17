@@ -2,6 +2,7 @@ package com.example.javabuilder.controller;
 
 import com.example.javabuilder.dto.request.ApiResponse;
 import com.example.javabuilder.dto.request.ProductRequestDTO;
+import com.example.javabuilder.dto.response.ProductResponseDTO;
 import com.example.javabuilder.model.Product;
 import com.example.javabuilder.service.itf.product.ProductService;
 import jakarta.validation.Valid;
@@ -30,8 +31,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ApiResponse<Product> getProductById(@PathVariable String id) {
-        ApiResponse<Product> apiResponse = new ApiResponse<>();
+    public ApiResponse<ProductResponseDTO> getProductById(@PathVariable String id) {
+        ApiResponse<ProductResponseDTO> apiResponse = new ApiResponse<>();
         apiResponse.setResult(productService.getProductById(id));
         return apiResponse;
     }
@@ -42,7 +43,7 @@ public class ProductController {
     }
 
     @PutMapping("/products/{id}")
-    public Product updateProduct(@PathVariable String id, ProductRequestDTO request) {
+    public ProductResponseDTO updateProduct(@PathVariable String id, ProductRequestDTO request) {
         return productService.updateProduct(id, request);
     }
 
