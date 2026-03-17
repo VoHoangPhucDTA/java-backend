@@ -1,4 +1,4 @@
-package com.example.javabuilder.service.impl.product;
+package com.example.javabuilder.service.impl;
 
 import com.example.javabuilder.dto.request.ProductRequestDTO;
 import com.example.javabuilder.dto.response.ProductResponseDTO;
@@ -7,10 +7,12 @@ import com.example.javabuilder.exception.ErrorCode;
 import com.example.javabuilder.mapper.ProductMapper;
 import com.example.javabuilder.model.Product;
 import com.example.javabuilder.repository.ProductRepository;
-import com.example.javabuilder.service.itf.product.ProductService;
-import jakarta.validation.Valid;
+import com.example.javabuilder.service.itf.ProductService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +26,14 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
 
     @Override
-    public Product createProduct(ProductRequestDTO dto) {
+    public ProductResponseDTO createProduct(ProductRequestDTO dto) {
         if (productRepository.existsByName(dto.getName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
         Product product = productMapper.toProduct(dto);
-        productRepository.save(product);
-        return product;
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        product.setPassword(passwordEncoder.encode(dto.getPassword()));
+        return productMapper.toProductResponse(productRepository.save(product));
     }
 
     @Override
@@ -40,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-       return productRepository.findAll();
+    public List<ProductResponseDTO> getAllProducts() {
+       return productRepository.findAll().stream().map(productMapper::toProductResponse).toList();
     }
 
     @Override

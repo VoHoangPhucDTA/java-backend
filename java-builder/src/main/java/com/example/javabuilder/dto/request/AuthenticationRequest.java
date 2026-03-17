@@ -1,21 +1,19 @@
-package com.example.javabuilder.dto.response;
+package com.example.javabuilder.dto.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
 
-import java.math.BigDecimal;
 
 @Data // Tự động có getter,setter,toString,EqualAndHashcode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponseDTO {
-    String id;
+public class AuthenticationRequest {
     String name;
-    String description;
-    BigDecimal price;
-    String imageUrl;
     String password;
-
 }

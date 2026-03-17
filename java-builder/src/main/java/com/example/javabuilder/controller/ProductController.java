@@ -3,8 +3,8 @@ package com.example.javabuilder.controller;
 import com.example.javabuilder.dto.request.ApiResponse;
 import com.example.javabuilder.dto.request.ProductRequestDTO;
 import com.example.javabuilder.dto.response.ProductResponseDTO;
-import com.example.javabuilder.model.Product;
-import com.example.javabuilder.service.itf.product.ProductService;
+import com.example.javabuilder.service.itf.ProductService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,24 +17,24 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/products")
-    public ApiResponse<Product> createProduct(@Valid @RequestBody ProductRequestDTO product) {
-        ApiResponse<Product> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(productService.createProduct(product));
-        return apiResponse;
+    public ApiResponse<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO product) {
+        return ApiResponse.<ProductResponseDTO>builder()
+                .result(productService.createProduct(product))
+                .build();
     }
 
     @GetMapping("/products")
-    public ApiResponse<List<Product>> getAllProducts() {
-        ApiResponse<List<Product>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(productService.getAllProducts());
-        return apiResponse;
+    public ApiResponse<List<ProductResponseDTO>> getAllProducts() {
+        return ApiResponse.<List<ProductResponseDTO>>builder()
+                .result(productService.getAllProducts())
+                .build();
     }
 
     @GetMapping("/products/{id}")
     public ApiResponse<ProductResponseDTO> getProductById(@PathVariable String id) {
-        ApiResponse<ProductResponseDTO> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(productService.getProductById(id));
-        return apiResponse;
+        return ApiResponse.<ProductResponseDTO>builder()
+                .result(productService.getProductById(id))
+                .build();
     }
 
     @DeleteMapping("/products/{id}")

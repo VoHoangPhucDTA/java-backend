@@ -1,8 +1,8 @@
 package com.example.javabuilder.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -14,19 +14,22 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    String id;
 
     @Column(nullable = false)
-    private String name;
+    String name;
     @Column(nullable = false)
-    private String description;
+    String description;
 
-    private BigDecimal price;
-    private String imageUrl;
-    private Instant createdAt;
-    private Instant updatedAt;
+    BigDecimal price;
+    String imageUrl;
+    String password;
+
+    Instant createdAt;
+    Instant updatedAt;
 
 }

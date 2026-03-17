@@ -1,6 +1,5 @@
 package com.example.javabuilder.dto.request;
 
-import com.example.javabuilder.exception.ErrorCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -26,4 +25,7 @@ public class ProductRequestDTO {
     BigDecimal price;
 
     String imageUrl;
+
+    @NotBlank(message = "PASSWORD_BLANK")
+    String password;
 }
